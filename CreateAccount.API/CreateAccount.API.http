@@ -1,0 +1,6 @@
+@CreateAccount.API_HostAddress = http://localhost:5092
+
+GET {{CreateAccount.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
