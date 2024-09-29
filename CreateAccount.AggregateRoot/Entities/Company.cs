@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CreateAccount.AggregateRoot.Entities;
+using Microsoft.AspNetCore.Components.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,3 +14,4 @@ namespace CreateAccount.AggregateRoot.Entities
         public string Name { get; set; }
     }
 }
+

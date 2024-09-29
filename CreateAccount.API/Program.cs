@@ -1,12 +1,17 @@
 using CreateAccount.Handler.Abstraction;
-using CreateAccount.Repository.Data;
 using CreateAccount.Repository.Repository;
 using CreateAccount.Repository.Repository.Abstraction;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers()
+
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CheckNamesRequestDTOValidator>());
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -14,9 +19,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<CheckNamesHandler>();
 builder.Services.AddScoped<ICheckNamesHandler, CheckNamesHandler>();
+builder.Services.AddValidatorsFromAssemblyContaining<CheckNamesRequestDTOValidator>();
 
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,10 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
-

@@ -19,4 +19,8 @@
     <ProjectReference Include="..\CreateAccount.AggregateRoot\CreateAccount.AggregateRoot.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\Abstraction\" />
+  </ItemGroup>
+
 </Project>

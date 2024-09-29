@@ -1,11 +1,5 @@
-﻿using CreateAccount.Repository.Data;
-using CreateAccount.Repository.Repository.Abstraction;
+﻿using CreateAccount.Repository.Repository.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CreateAccount.Repository.Repository
 {

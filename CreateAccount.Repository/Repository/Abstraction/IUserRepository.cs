@@ -10,5 +10,4 @@ namespace CreateAccount.Repository.Repository.Abstraction
     {
         Task<bool> IsUserNameExistAsync(string userName);
     }
-
 }
