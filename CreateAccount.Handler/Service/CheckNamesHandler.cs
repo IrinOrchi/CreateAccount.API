@@ -30,7 +30,7 @@ public class CheckNamesHandler : ICheckNamesHandler
             };
         }
 
-        // Initialize the Aggregate Root and map DTO to the domain entities (manual mapping)
+        //(manual mapping)
         var aggregateRoot = new AccountAggregateRoot(dto);
 
         // Check for existing user if 'CheckFor' is 'u'
