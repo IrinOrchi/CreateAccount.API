@@ -1,35 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
 using CreateAccount.DTO.DTOs;
 using CreateAccount.Handler.Abstraction;
+using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
-[ApiController]
-public class LocationController : ControllerBase
+namespace CreateAccount.Api.Controllers
 {
-    private readonly ILocationHandler _locationHandler;
-
-    public LocationController(ILocationHandler locationHandler)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LocationController : ControllerBase
     {
-        _locationHandler = locationHandler;
-    }
+        private readonly ILocationHandler _locationHandler;
 
-    [HttpPost("GetLocations")]
-    public async Task<IActionResult> GetLocations([FromBody] LocationRequestDTO request)
-    {
-        // Call the handler to process the request and get locations
-        var locations = await _locationHandler.Handle(request);
-
-        // Check if there are no locations found
-        if (locations.Count == 0)
+        public LocationController(ILocationHandler locationHandler)
         {
-            return Ok(new { Error = "0", BdDistrict = "null" });
+            _locationHandler = locationHandler;
         }
 
-        // Return the locations in the response
-        return Ok(new
+        [HttpPost("GetLocations")]
+        public async Task<IActionResult> GetLocations([FromBody] LocationRequestDTO request)
         {
-            Error = "0",
-            BdDistrict = locations
-        });
+            var locations = await _locationHandler.Handle(request);
+
+            if (locations.Count == 0)
+            {
+                return Ok(new { Error = "0", BdDistrict = "null" });
+            }
+
+            return Ok(new
+            {
+                Error = "0",
+                BdDistrict = locations
+            });
+        }
     }
 }
