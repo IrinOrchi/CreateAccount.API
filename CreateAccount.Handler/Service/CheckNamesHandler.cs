@@ -3,6 +3,7 @@ using CreateAccount.DTO.DTOs;
 using CreateAccount.Handler.Abstraction;
 using CreateAccount.Repository.Repository.Abstraction;
 using FluentValidation;
+using System.Threading.Tasks;
 
 public class CheckNamesHandler : ICheckNamesHandler
 {
@@ -30,29 +31,40 @@ public class CheckNamesHandler : ICheckNamesHandler
             };
         }
 
-        //(manual mapping)
         var aggregateRoot = new AccountAggregateRoot(dto);
-
-        // Check for existing user if 'CheckFor' is 'u'
-        if (dto.CheckFor == "u" && aggregateRoot.User != null)
+        if (dto.CheckFor == "c")
         {
-            var userExists = await _userRepository.IsUserNameExistAsync(aggregateRoot.User.UserName);
-            if (userExists)
+            if (!string.IsNullOrEmpty(dto.CompanyName))
             {
-                return new CheckNamesResponseDTO { Message = "This Username already exists. Try another." };
+                var companyExists = await _companyRepository.IsCompanyExistAsync(dto.CompanyName);
+                if (companyExists)
+                {
+                    return new CheckNamesResponseDTO { Message = "Company Name already exists. Dial 16479 to retrieve your account." };
+                }
             }
         }
-        // Check for existing company if 'CheckFor' is 'c'
-        else if (aggregateRoot.Company != null)
+        else if (dto.CheckFor == "u")
         {
-            var companyExists = await _companyRepository.IsCompanyExistAsync(aggregateRoot.Company.Name);
-            if (companyExists)
+            if (!string.IsNullOrEmpty(dto.UserName))
             {
-                return new CheckNamesResponseDTO { Message = "Company Name already exists. Dial 16479 to retrieve your account." };
+                var userExists = await _userRepository.IsUserNameExistAsync(dto.UserName);
+                if (userExists)
+                {
+                    return new CheckNamesResponseDTO { Message = "This Username already exists. Try another." };
+                }
             }
-        }
 
-        // If everything is okay, return a success message
+        }
         return new CheckNamesResponseDTO { Message = "Success!" };
+    }
+
+    public async Task<bool> UserExistsAsync(string userName)
+    {
+        return await _userRepository.IsUserNameExistAsync(userName);
+    }
+
+    public async Task<bool> CompanyExistsAsync(string companyName)
+    {
+        return await _companyRepository.IsCompanyExistAsync(companyName);
     }
 }

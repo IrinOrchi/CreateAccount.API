@@ -1,7 +1,7 @@
 ﻿using CreateAccount.DTO.DTOs;
 using CreateAccount.Handler.Abstraction;
-using CreateAccount.Repository.Repository.Abstraction;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CreateAccount.API.Controllers
 {
@@ -10,17 +10,13 @@ namespace CreateAccount.API.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ICheckNamesHandler _checkNamesHandler;
-        private readonly IUserRepository _userRepository;
-        private readonly ICompanyRepository _companyRepository; // Add company repository for checking
 
-        public AccountController(ICheckNamesHandler checkNamesHandler, IUserRepository userRepository, ICompanyRepository companyRepository)
+        public AccountController(ICheckNamesHandler checkNamesHandler)
         {
             _checkNamesHandler = checkNamesHandler;
-            _userRepository = userRepository;
-            _companyRepository = companyRepository;
         }
 
-        // Existing POST method for checking names
+        // POST method for checking names
         [HttpPost("CheckNames")]
         public async Task<IActionResult> CheckNames([FromBody] CheckNamesRequestDTO request)
         {
@@ -37,17 +33,22 @@ namespace CreateAccount.API.Controllers
         [HttpGet("CheckUserAndCompany")]
         public async Task<IActionResult> CheckUserAndCompany([FromQuery] string userName, [FromQuery] string companyName)
         {
-            // Check if the username exists
-            var userExists = await _userRepository.IsUserNameExistAsync(userName);
+            var checkRequest = new CheckNamesRequestDTO
+            {
+                UserName = userName,
+                CompanyName = companyName
+            };
 
-            // Check if the company name exists
-            var companyExists = await _companyRepository.IsCompanyExistAsync(companyName);
+            var response = await _checkNamesHandler.Handle(checkRequest);
+            if (!string.IsNullOrEmpty(response.Message))
+            {
+                return BadRequest(response);
+            }
 
-            // Return result as JSON
             return Ok(new
             {
-                UserExists = userExists,
-                CompanyExists = companyExists
+                UserExists = string.IsNullOrEmpty(checkRequest.UserName) ? false : await _checkNamesHandler.UserExistsAsync(checkRequest.UserName),
+                CompanyExists = string.IsNullOrEmpty(checkRequest.CompanyName) ? false : await _checkNamesHandler.CompanyExistsAsync(checkRequest.CompanyName)
             });
         }
     }
