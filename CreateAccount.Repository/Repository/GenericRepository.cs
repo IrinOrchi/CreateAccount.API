@@ -98,6 +98,43 @@ namespace CreateAccount.Repository.Repository
                 })
                 .ToListAsync();
         }
+
+        public async Task<List<IndustryTypeResponseDTO>> GetIndustryTypeAsync(int? industryId, string organizationText, int? corporateID)
+        {
+            // Base query that includes all org types
+            var query = _context.OrgTypes.AsQueryable();
+
+       
+                query = from c in _context.IndustryWiseCompanies
+                        join o in query on c.OrgTypeId equals o.OrgTypeId
+                        where c.CorporateID == corporateID
+                        select o;
+            
+
+            // If IndustryId is provided, filter by IndustryId
+            if (industryId.HasValue && industryId.Value != -1)
+            {
+                query = query.Where(o => o.IndustryId == industryId);
+            }
+            9
+            // If OrganizationText is provided, filter by OrgTypeName containing the text
+            if (!string.IsNullOrEmpty(organizationText))
+            {
+                query = query.Where(o => o.OrgTypeName.Contains(organizationText));
+            }
+
+            // Final result ordering and selection
+            var orgTypes = await query.OrderBy(o => o.OrgTypeName)
+                .Select(o => new IndustryTypeResponseDTO
+                {
+                    IndustryValue = o.OrgTypeId,
+                    IndustryName = o.OrgTypeName
+                }).ToListAsync();
+
+            return orgTypes;
+        }
+
+
     }
 
 }

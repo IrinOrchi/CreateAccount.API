@@ -19,12 +19,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IGenericRepository, GenericRepository>();
+
 builder.Services.AddScoped<CheckNamesHandler>();
 builder.Services.AddScoped<ICheckNamesHandler, CheckNamesHandler>();
-//builder.Services.AddValidatorsFromAssemblyContaining<CheckNamesRequestDTOValidator>();
 builder.Services.AddScoped<IValidator<CheckNamesRequestDTO>, CheckNamesRequestDTOValidator>();
+
 builder.Services.AddScoped<IValidator<LocationRequestDTO>, LocationRequestDTOValidator>();
 builder.Services.AddScoped<ILocationHandler, LocationHandler>();
+
+builder.Services.AddScoped<IIndustryTypeHandler,IndustryTypeHandler>();
+builder.Services.AddScoped<IValidator<IndustryTypeRequestDTO>, IndustryTypeRequestDTOValidator>();
 
 
 

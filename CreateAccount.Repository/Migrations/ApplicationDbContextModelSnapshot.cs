@@ -38,6 +38,27 @@ namespace CreateAccount.Repository.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.IndustryWiseCompany", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CorporateID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrgTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrgTypeId");
+
+                    b.ToTable("IndustryWiseCompanies");
+                });
+
             modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.Location", b =>
                 {
                     b.Property<int>("L_ID")
@@ -65,6 +86,33 @@ namespace CreateAccount.Repository.Migrations
                     b.ToTable("Locations");
                 });
 
+            modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.OrgType", b =>
+                {
+                    b.Property<int>("OrgTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrgTypeId"));
+
+                    b.Property<int>("IndustryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OrgTypeName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("UserDefined")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("VerifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("OrgTypeId");
+
+                    b.ToTable("OrgTypes");
+                });
+
             modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -80,6 +128,17 @@ namespace CreateAccount.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.IndustryWiseCompany", b =>
+                {
+                    b.HasOne("CreateAccount.AggregateRoot.Entities.OrgType", "OrgType")
+                        .WithMany()
+                        .HasForeignKey("OrgTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OrgType");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,5 +12,7 @@ namespace CreateAccount.Repository.Repository.Abstraction
         Task<bool> IsUserNameExistAsync(string userName);
         Task<bool> IsCompanyExistAsync(string companyName);
         Task<List<LocationResponseDTO>> GetLocationsAsync(string districtId, string outsideBd);
+        Task<List<IndustryTypeResponseDTO>> GetIndustryTypeAsync(int? industryId, string organizationText, int? corporateID);
+
     }
 }
