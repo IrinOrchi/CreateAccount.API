@@ -11,6 +11,7 @@ namespace CreateAccount.Api.Controllers
         private readonly ILocationHandler _locationHandler;
 
         public LocationController(ILocationHandler locationHandler)
+
         {
             _locationHandler = locationHandler;
         }

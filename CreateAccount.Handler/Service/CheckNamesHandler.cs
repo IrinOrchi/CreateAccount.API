@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 public class CheckNamesHandler : ICheckNamesHandler
 {
-    private readonly IUserRepository _userRepository;
-    private readonly ICompanyRepository _companyRepository;
+    private readonly IGenericRepository _genericRepository;
     private readonly IValidator<CheckNamesRequestDTO> _validator;
 
-    public CheckNamesHandler(IUserRepository userRepository, ICompanyRepository companyRepository, IValidator<CheckNamesRequestDTO> validator)
+    public CheckNamesHandler(IGenericRepository genericRepository, IValidator<CheckNamesRequestDTO> validator)
     {
-        _userRepository = userRepository;
-        _companyRepository = companyRepository;
+        _genericRepository = genericRepository;
         _validator = validator;
     }
 
@@ -36,7 +34,7 @@ public class CheckNamesHandler : ICheckNamesHandler
         {
             if (!string.IsNullOrEmpty(dto.CompanyName))
             {
-                var companyExists = await _companyRepository.IsCompanyExistAsync(dto.CompanyName);
+                var companyExists = await _genericRepository.IsCompanyExistAsync(dto.CompanyName);
                 if (companyExists)
                 {
                     return new CheckNamesResponseDTO { Message = "Company Name already exists. Dial 16479 to retrieve your account." };
@@ -47,7 +45,7 @@ public class CheckNamesHandler : ICheckNamesHandler
         {
             if (!string.IsNullOrEmpty(dto.UserName))
             {
-                var userExists = await _userRepository.IsUserNameExistAsync(dto.UserName);
+                var userExists = await _genericRepository.IsUserNameExistAsync(dto.UserName);
                 if (userExists)
                 {
                     return new CheckNamesResponseDTO { Message = "This Username already exists. Try another." };
@@ -60,11 +58,11 @@ public class CheckNamesHandler : ICheckNamesHandler
 
     public async Task<bool> UserExistsAsync(string userName)
     {
-        return await _userRepository.IsUserNameExistAsync(userName);
+        return await _genericRepository.IsUserNameExistAsync(userName);
     }
 
     public async Task<bool> CompanyExistsAsync(string companyName)
     {
-        return await _companyRepository.IsCompanyExistAsync(companyName);
+        return await _genericRepository.IsCompanyExistAsync(companyName);
     }
 }

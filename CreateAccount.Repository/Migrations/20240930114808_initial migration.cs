@@ -5,7 +5,7 @@
 namespace CreateAccount.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initialmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,22 @@ namespace CreateAccount.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    L_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    L_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OutsideBangladesh = table.Column<bool>(type: "bit", nullable: true),
+                    L_Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ParentID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.L_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,6 +58,9 @@ namespace CreateAccount.Repository.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Companies");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Users");

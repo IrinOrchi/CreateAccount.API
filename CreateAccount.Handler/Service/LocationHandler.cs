@@ -11,16 +11,16 @@ namespace CreateAccount.Handler.Service
 {
     public class LocationHandler : ILocationHandler
     {
-        private readonly ILocationRepository _locationRepository;
+        private readonly IGenericRepository _genericRepository;
 
-        public LocationHandler(ILocationRepository locationRepository)
+        public LocationHandler(IGenericRepository genericRepository)
         {
-            _locationRepository = locationRepository;
+            _genericRepository = genericRepository;
         }
 
         public async Task<List<LocationResponseDTO>> Handle(LocationRequestDTO request)
         {
-            var locations = await _locationRepository.GetLocationsAsync(request.DistrictId, request.OutsideBd);
+            var locations = await _genericRepository.GetLocationsAsync(request.DistrictId, request.OutsideBd);
             return locations;
         }
     }
