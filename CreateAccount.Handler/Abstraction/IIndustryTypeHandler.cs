@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CreateAccount.DTO.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace CreateAccount.Handler.Abstraction
 {
     public interface IIndustryTypeHandler
     {
-        Task<List<IndustryTypeResponseDTO>> HandleIndustryType(IndustryTypeRequestDTO request);
+        Task<List<IndustryTypeResponseDTO>> HandleIndustryTypeAsync(IndustryTypeRequestDTO request);
 
     }
 }

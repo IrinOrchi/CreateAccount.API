@@ -40,21 +40,16 @@ namespace CreateAccount.Repository.Migrations
 
             modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.IndustryWiseCompany", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CorporateID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CorporateID")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CorporateID"));
 
                     b.Property<int>("OrgTypeId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrgTypeId");
+                    b.HasKey("CorporateID");
 
                     b.ToTable("IndustryWiseCompanies");
                 });
@@ -99,11 +94,10 @@ namespace CreateAccount.Repository.Migrations
 
                     b.Property<string>("OrgTypeName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("UserDefined")
-                        .HasColumnType("bit");
+                    b.Property<int>("UserDefined")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("VerifiedOn")
                         .HasColumnType("datetime2");
@@ -128,17 +122,6 @@ namespace CreateAccount.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CreateAccount.AggregateRoot.Entities.IndustryWiseCompany", b =>
-                {
-                    b.HasOne("CreateAccount.AggregateRoot.Entities.OrgType", "OrgType")
-                        .WithMany()
-                        .HasForeignKey("OrgTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OrgType");
                 });
 #pragma warning restore 612, 618
         }

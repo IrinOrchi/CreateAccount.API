@@ -1,9 +1,8 @@
-﻿using CreateAccount.Handler.Abstraction;
-using CreateAccount.Handler.Service;
-using Microsoft.AspNetCore.Http;
+﻿using CreateAccount.DTO.DTOs;
+using CreateAccount.Handler.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CreateAccount.API.Controllers
+namespace IndustryTypePrac.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -12,28 +11,36 @@ namespace CreateAccount.API.Controllers
         private readonly IIndustryTypeHandler _industryTypeHandler;
 
         public IndustryTypeController(IIndustryTypeHandler industryTypeHandler)
-
         {
             _industryTypeHandler = industryTypeHandler;
         }
 
         [HttpPost("GetIndustryType")]
-        public async Task<IActionResult> GetIndustryType([FromBody] IndustryTypeRequestDTO request)
+        public async Task<IActionResult> GetIndustryTypeAsync(IndustryTypeRequestDTO request)
         {
-            var industryTypes = await _industryTypeHandler.HandleIndustryType(request);
-
-            if (industryTypes.Count == 0)
+            try
             {
-                return Ok(new { Error = "0", IndustryType = "null" });
+                var industryTypes = await _industryTypeHandler.HandleIndustryTypeAsync(request);
+
+                var response = new
+                {
+                    Error = "0",
+                    IndustryType = industryTypes.Any() ? (object)industryTypes : null 
+                };
+
+                return Ok(response);
             }
-
-            return Ok(new
+            catch (Exception ex)
             {
-                Error = "0",
-                IndustryType = industryTypes
-            });
-        }
+                var errorResponse = new
+                {
+                    Error = "1",
+                    Message = ex.Message
+                };
 
+                return BadRequest(errorResponse);
+            }
+        }
 
     }
 }

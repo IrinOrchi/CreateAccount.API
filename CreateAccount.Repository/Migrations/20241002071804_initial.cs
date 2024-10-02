@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CreateAccount.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initialmigration : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,19 @@ namespace CreateAccount.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Companies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IndustryWiseCompanies",
+                columns: table => new
+                {
+                    CorporateID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrgTypeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IndustryWiseCompanies", x => x.CorporateID);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,10 +59,10 @@ namespace CreateAccount.Repository.Migrations
                 {
                     OrgTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrgTypeName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    IndustryId = table.Column<int>(type: "int", nullable: false),
-                    UserDefined = table.Column<bool>(type: "bit", nullable: false),
-                    VerifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    OrgTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserDefined = table.Column<int>(type: "int", nullable: false),
+                    VerifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IndustryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,31 +81,6 @@ namespace CreateAccount.Repository.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "IndustryWiseCompanies",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CorporateID = table.Column<int>(type: "int", nullable: false),
-                    OrgTypeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IndustryWiseCompanies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IndustryWiseCompanies_OrgTypes_OrgTypeId",
-                        column: x => x.OrgTypeId,
-                        principalTable: "OrgTypes",
-                        principalColumn: "OrgTypeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IndustryWiseCompanies_OrgTypeId",
-                table: "IndustryWiseCompanies",
-                column: "OrgTypeId");
         }
 
         /// <inheritdoc />
@@ -108,10 +96,10 @@ namespace CreateAccount.Repository.Migrations
                 name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "OrgTypes");
 
             migrationBuilder.DropTable(
-                name: "OrgTypes");
+                name: "Users");
         }
     }
 }
