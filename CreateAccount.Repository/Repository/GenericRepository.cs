@@ -150,11 +150,23 @@ namespace CreateAccount.Repository.Repository
         }
 
 
+        public async Task<RLNoDataDTO> GetRLNoDataAsync(string rlNo)
+        {
+            // LINQ Query to fetch RLNo data
+            var data = await (from ra in _context.RecruitingAgencies
+                              where ra.RLNO == rlNo
+                              select new RLNoDataDTO
+                              {
+                                  RL_no = ra.RaStatus,
+                                  Company_Name = ra.Name
+                              }).FirstOrDefaultAsync();
 
-
-
-
+            return data;
+        }
 
     }
-
 }
+
+
+
+

@@ -13,4 +13,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Location> Locations { get; set; }
     public DbSet<OrgType> OrgTypes { get; set; } 
     public DbSet<IndustryWiseCompany> IndustryWiseCompanies { get; set; }
+    public DbSet<RecruitingAgency> RecruitingAgencies { get; set; }
+
 }
